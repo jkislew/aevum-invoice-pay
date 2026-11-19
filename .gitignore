@@ -1,0 +1,7 @@
+node_modules/
+.env
+*.log
+# generated at deploy/demo time
+deployment.json
+demo-proof.json
+payment-request-*.png

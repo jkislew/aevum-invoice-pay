@@ -1,0 +1,29 @@
+{
+  "name": "aevum-invoice-pay",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "node scripts/local-test.mjs",
+    "compile": "node scripts/compile.mjs",
+    "deploy": "node scripts/deploy.mjs",
+    "demo": "node scripts/demo-flow.mjs",
+    "config": "node scripts/build-app-config.mjs",
+    "serve": "npx --yes serve -s app -l 8080"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "ethers": "^6.17.0",
+    "qrcode": "^1.5.4",
+    "solc": "^0.8.26"
+  },
+  "devDependencies": {
+    "ganache": "^7.9.2"
+  }
+}
