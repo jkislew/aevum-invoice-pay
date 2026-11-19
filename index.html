@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Aevum Invoice Pay — tUSD8 invoice payments on Aevum Testnet</title>
+<style>
+  :root { --bg:#0b1020; --card:#151b31; --line:#26304f; --txt:#e8ecf8; --mut:#93a0c2; --acc:#5b8cff; --ok:#2fbf71; --warn:#ffb020; --err:#ff5b6a; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--txt); }
+  header { padding:20px 16px 8px; max-width:880px; margin:0 auto; }
+  h1 { font-size:22px; margin:0 0 4px; } h2 { font-size:16px; margin:0 0 10px; }
+  .sub { color:var(--mut); font-size:13px; }
+  main { max-width:880px; margin:0 auto; padding:12px 16px 40px; display:grid; gap:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  label { display:block; font-size:12px; color:var(--mut); margin:10px 0 4px; }
+  input, textarea { width:100%; padding:9px 10px; border-radius:8px; border:1px solid var(--line); background:#0e1430; color:var(--txt); font-size:14px; }
+  button { background:var(--acc); color:#fff; border:0; border-radius:8px; padding:10px 14px; font-size:14px; cursor:pointer; }
+  button.secondary { background:#232c4d; } button:disabled { opacity:.5; cursor:not-allowed; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .bal { font-size:20px; font-weight:600; } .mono { font-family:ui-monospace,Menlo,monospace; font-size:12.5px; word-break:break-all; }
+  .status { font-size:13px; margin-top:8px; } .ok{color:var(--ok)} .warn{color:var(--warn)} .err{color:var(--err)} .mut{color:var(--mut)}
+  .pill { display:inline-block; padding:2px 8px; border-radius:999px; background:#232c4d; font-size:12px; }
+  #qr { background:#fff; padding:10px; border-radius:8px; width:max-content; margin-top:10px; }
+  a { color:var(--acc); }
+  .cop { border-left:3px solid var(--warn); padding:8px 12px; background:#1a2138; border-radius:6px; margin:10px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Aevum Invoice Pay</h1>
+  <div class="sub">Invoice payments in <b>tUSD8</b> on <b>QDay Aevum Testnet</b> (chain 44005) — with confirmation of payee before you pay. Built for the Aevum Builder Challenge #1.</div>
+</header>
+<main>
+  <section class="card">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <div class="sub">Wallet</div>
+        <div id="walletAddr" class="mono">Not connected</div>
+      </div>
+      <button id="btnConnect">Connect wallet</button>
+    </div>
+    <div class="row" style="margin-top:12px; gap:24px">
+      <div><div class="sub">Gas balance</div><div class="bal" id="balGas">—</div></div>
+      <div><div class="sub">tUSD8 balance</div><div class="bal" id="balUsd">—</div></div>
+      <div><div class="sub">InvoicePay contract</div><div class="mono" id="contractAddr">—</div></div>
+    </div>
+    <div class="status mut" id="netStatus">Connect a wallet to begin. Test tokens only — get them from the QDay faucet / Discord (see README).</div>
+  </section>
+
+  <section class="card">
+    <h2>Merchant — create an invoice</h2>
+    <label>Payee address (who receives the tUSD8)</label>
+    <input id="fPayee" placeholder="0x..." />
+    <label>Payee name — shown to the payer for confirmation</label>
+    <input id="fLabel" placeholder="e.g. Demo Merchant" />
+    <label>Amount (tUSD8)</label>
+    <input id="fAmount" type="number" min="0" step="0.01" placeholder="1.00" />
+    <label>Memo (what is this invoice for?)</label>
+    <input id="fMemo" placeholder="e.g. Invoice #1042 — design work" />
+    <label>Expires in (days)</label>
+    <input id="fDays" type="number" min="1" value="7" />
+    <div style="margin-top:12px"><button id="btnCreate">Create invoice</button></div>
+    <div class="status" id="createStatus"></div>
+    <div id="payLinkBox" style="display:none">
+      <label>Payment request link — send this to your customer</label>
+      <div class="mono" id="payLink"></div>
+      <div id="qr"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Customer — review &amp; pay an invoice</h2>
+    <label>Invoice ID</label>
+    <div class="row"><input id="fInvoiceId" style="max-width:200px" placeholder="1" /><button class="secondary" id="btnLoad">Load invoice</button></div>
+    <div id="invoiceBox" style="display:none">
+      <div class="cop">
+        <div class="sub">Confirmation of payee — check this matches who you expect to pay</div>
+        <div style="font-size:16px; font-weight:600" id="vLabel"></div>
+        <div class="mono" id="vPayee"></div>
+      </div>
+      <div class="row" style="gap:24px">
+        <div><div class="sub">Amount</div><div class="bal" id="vAmount"></div></div>
+        <div><div class="sub">Status</div><div><span class="pill" id="vStatus"></span></div></div>
+        <div><div class="sub">Expires</div><div id="vExpiry"></div></div>
+      </div>
+      <label>Memo</label><div id="vMemo"></div>
+      <div class="row" style="margin-top:14px">
+        <button id="btnApprove">1. Approve tUSD8</button>
+        <button id="btnPay">2. Pay invoice</button>
+      </div>
+      <div class="status" id="payStatus"></div>
+    </div>
+  </section>
+
+  <footer class="sub" style="text-align:center">
+    Aevum Testnet only — tUSD8 and tQDAY are test tokens with no monetary value.
+    Explorer: <a href="https://explorer-test.qday.info" target="_blank" rel="noopener">explorer-test.qday.info</a>
+  </footer>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
