@@ -2,8 +2,9 @@
 
 Ready-to-paste text for every field of the DoraHacks submission form.
 Submit at: https://dorahacks.io/hackathon/qday/detail — **deadline Dec 11, 2026 08:00 UTC**.
-Only two placeholders remain: `[REPO_URL]` (after the user pushes this repo to a public
-GitHub repository) and `[LIVE_URL]` (wherever `app/` ends up hosted).
+All links are filled in: the repository is public on GitHub and the dApp is
+served from the repo's `gh-pages` branch (GitHub Pages must still be enabled
+in the repo settings — a browser step — before the live URL resolves).
 
 ---
 
@@ -70,9 +71,9 @@ Dockerfile that serves the dApp on port 8080.
 
 | Field | Value |
 |---|---|
-| GitHub repository | `[REPO_URL]` |
-| Live demo | `[LIVE_URL]` |
-| Live demo — straight to the paid demo invoice | `[LIVE_URL]/?invoice=1` |
+| GitHub repository | https://github.com/jkislew/aevum-invoice-pay |
+| Live demo | https://jkislew.github.io/aevum-invoice-pay/ |
+| Live demo — straight to the paid demo invoice | https://jkislew.github.io/aevum-invoice-pay/?invoice=1 |
 | Documentation | README.md in the repository (setup, architecture, addresses, reproduction steps) |
 | License | MIT |
 
@@ -115,15 +116,16 @@ Final balances reconcile exactly: merchant 4.25 tUSD8 (5.00 faucet − 2.00 top-
 
 ## Demo-invoice QR code
 
-The QR for the demo invoice is generated once the live demo URL exists
-(the QR encodes the payment-request link, so it cannot be finalized before hosting):
+Generated 2026-11-20 with:
 
 ```
-node scripts/make-qr.mjs 1 [LIVE_URL]
-# writes payment-request-1.png (repo root), encoding [LIVE_URL]/?invoice=1
+node scripts/make-qr.mjs 1 https://jkislew.github.io/aevum-invoice-pay
+# writes payment-request-1.png (repo root), encoding https://jkislew.github.io/aevum-invoice-pay/?invoice=1
 ```
 
-Attach `payment-request-1.png` to the submission next to the screenshots above.
+`payment-request-1.png` is kept locally (binary files cannot go through the
+GitHub connector snapshot push); it will be uploaded via the browser together
+with the screenshots. Attach it to the submission next to the screenshots above.
 
 ## Internal notes (do not paste into the form)
 

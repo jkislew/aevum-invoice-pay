@@ -13,8 +13,12 @@ Demo Day (top 5 only): **Dec 15, 2026 06:00 UTC**, live video call, 3–5 minute
 - [ ] **DoraHacks account** — register for "Aevum Builder Challenge #1" on
       https://dorahacks.io/hackathon/qday/detail (registration opened Nov 16; the
       same page takes the project submission — no separate earlier cutoff).
-- [ ] **GitHub** — push this repo to a **public** repository under the user's account
-      (submission requires a public GitHub link; repo is MIT-licensed and ready).
+- [x] **GitHub** — repo is public: https://github.com/jkislew/aevum-invoice-pay
+      — pushed 2026-11-20 via the GitHub connector (`main`: all 27 text files;
+      `gh-pages`: dApp files at root). Still pending (browser steps): enable
+      GitHub Pages from the `gh-pages` branch, set the About website/topics,
+      and upload the 5 PNG screenshots + `payment-request-1.png` (binaries
+      cannot go through the connector).
 - [ ] **Submit the BUIDL** on the DoraHacks page before Dec 11 08:00 UTC with:
       public GitHub link, live demo URL (or Docker image), project documentation
       (README covers it), track = Invoice Payments.
@@ -31,15 +35,22 @@ Demo Day (top 5 only): **Dec 15, 2026 06:00 UTC**, live video call, 3–5 minute
       — invoice #1 PAID; all 7 txs confirmed `success` on the explorer
 - [x] Fill the README "Test evidence" table with the real tx hashes/explorer links
 - [x] README addresses table updated with the deployed InvoicePay address
-- [ ] Host the dApp (static `app/`, or the included Dockerfile) and note the live URL
-- [ ] `node scripts/make-qr.mjs <invoiceId> <liveBaseUrl>` → QR for the demo invoice
+- [x] Host the dApp — `gh-pages` branch pushed with the `app/` contents at its
+      root; live URL once Pages is enabled: https://jkislew.github.io/aevum-invoice-pay/
+      (enabling Pages itself is a browser step, see the GitHub item above;
+      the included Dockerfile remains the fallback)
+- [x] `node scripts/make-qr.mjs 1 https://jkislew.github.io/aevum-invoice-pay`
+      → `payment-request-1.png` generated locally, encoding
+      https://jkislew.github.io/aevum-invoice-pay/?invoice=1
+      (kept local; upload via browser with the screenshots)
 - [x] Final pass: screenshots of the dApp + explorer pages for the DoraHacks form
       — DONE 2026-11-19: 5 screenshots in `submission-assets/` (dApp home,
       merchant create-invoice form, invoice #1 pay view in its real PAID state
       rendered from live chain data, explorer contract page, explorer
       pay-invoice tx page)
 - [x] `submission-assets/SUBMISSION-PACK.md` — ready-to-paste text for every
-      DoraHacks form field; only `[REPO_URL]` and `[LIVE_URL]` placeholders remain
+      DoraHacks form field; `[REPO_URL]` and `[LIVE_URL]` filled in
+      (repo + GitHub Pages URLs)
 
 ## ✅ Already done (phase 1, 2026-11-19)
 
